@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+#container{
+    position: relative;
+}
+#canvas{
+    transition: all 6s ease;
+}
+#btn{
+    position: absolute;
+    left: 120px;
+    top: 120px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #fff;
+    line-height: 60px;
+    text-align: center;
+    border: none;
+    outline: none;
+}
+#btn:after{
+    position: absolute;
+    display: block;
+    content: '';
+    left: 10px;
+    top: -32px;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    border-width: 20px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: #fff; 
+}
+</style>
+<body>
+    <div id="container">
+        <canvas id="canvas" width="300" height="300">浏览器不支持canvas</canvas>
+        <button id="btn">Go!</button>
+    </div>
+    <script>
+        (function(){
+            const num = 10;
+            const guys = ['浩华', '佩兰', '长风', '彪哥', '诺卡', '子房', '灵风', '大黄', '小麦', '新义'];
+            const getDeg = () => Math.random()*10000;
+            const getRandom = max => parseInt(Math.random()*max);
+            const getColor = () => `rgba(${getRandom(255)}, ${getRandom(255)}, ${getRandom(255)}, 0.3)`;
+            
+            let canvas = document.getElementById('canvas');
+            let btn = document.getElementById('btn');
+            
+            if(!canvas.getContext){
+                alert('浏览器不支持canvas');
+                return;
+            }
+            
+            let ctx = canvas.getContext('2d');
+            for (let i = 0; i < num; i++) {
+                // 保存当前状态
+                ctx.save();
+                ctx.beginPath();
+                ctx.translate(150, 150);
+                ctx.moveTo(0, 0);
+                ctx.rotate((360 / num * i + 360 / num / 2) * Math.PI/180);
+                ctx.arc(0, 0, 150, 0,  2 * Math.PI / num, false);
+
+                ctx.fillStyle = getColor();
+                ctx.fill();
+
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = '#fff';
+                ctx.stroke();
+
+                ctx.fillStyle = 'rgba(0,0,0,1)';
+                ctx.font="20px sans-serif";
+                ctx.fillText(guys[i], 80, 40);
+
+                ctx.restore();
+            }
+            
+            
+            // 抽奖
+            btn.onclick = function(){
+                console.log(getDeg());
+                canvas.style.transform = `rotate(${getDeg()}deg)`; 
+            }
+        })();
+    </script>
+</body>
+</html>
